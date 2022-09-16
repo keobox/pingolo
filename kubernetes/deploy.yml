@@ -1,0 +1,46 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: pingolo
+  labels:
+    name: pingolo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pingolo
+  namespace: pingolo
+  labels:
+    usecase: ping-from-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      usecase: ping-from-pod
+  template:
+    metadata:
+      labels:
+        usecase: ping-from-pod
+    spec:
+      containers:
+      - name: pingolo-app
+        image: quay.io/cplacani/pingolo:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ping-service
+  namespace: pingolo
+  labels:
+    usecase: ping-from-pod
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    nodePort: 30002
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    usecase: ping-from-pod
