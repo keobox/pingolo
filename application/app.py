@@ -7,6 +7,8 @@ import subprocess
 app = Flask(__name__)
 
 
+PACKETS = 5
+
 @app.route("/", methods=["GET"])
 def home():
     return {"help": "This is a ping service"}
@@ -22,15 +24,16 @@ def ping(ip):
             "ip": "na",
             "result": "{} is not a valid IP address".format(ip),
             "error_code": 0,
+            "packets": PACKETS
         }
     p = subprocess.Popen(["ping", "-c", "5", ip])
     p.wait()
     error_code = p.poll()
     if error_code == 0:
-        return {"ip": ip, "result": "alive", "error_code": error_code}
+        return {"ip": ip, "result": "alive", "error_code": error_code, "packets": PACKETS}
     if error_code == 2:
-        return {"ip": ip, "result": "unreachable", "error_code": error_code}
-    return {"ip": ip, "result": "na", "error_code": error_code}
+        return {"ip": ip, "result": "unreachable", "error_code": error_code, "packets": PACKETS}
+    return {"ip": ip, "result": "na", "error_code": error_code, "packets": PACKETS}
 
 
 if __name__ == "__main__":
