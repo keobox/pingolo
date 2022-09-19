@@ -1,13 +1,14 @@
 """API for pinging an IPv4 address."""
 
 from flask import Flask
+import os
 import socket
 import subprocess
 
 app = Flask(__name__)
 
 
-PACKETS = 5
+PACKETS = int(os.environ.get("PACKETS", "5"))
 
 
 @app.route("/", methods=["GET"])
