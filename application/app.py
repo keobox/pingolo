@@ -40,7 +40,7 @@ def ping(ip):
         return to_dict(ip, "alive", error_code)
     if error_code == 2:
         return to_dict(ip, "unreachable", error_code), 404
-    return to_dict(ip, "na", error_code)
+    return to_dict(ip, "na", error_code), 505
 
 
 if __name__ == "__main__":
