@@ -13,7 +13,7 @@ PACKETS = int(os.environ.get("PACKETS", "5"))
 
 @app.route("/", methods=["GET"])
 def home():
-    return {"help": "This is a ping service"}
+    return {"msg": "This is a ping service"}
 
 
 def to_dict(ip, result, error_code):
@@ -32,14 +32,14 @@ def ping(ip):
     try:
         socket.inet_aton(ip)
     except OSError:
-        return to_dict("na", "{} is not a valid IP address".format(ip), 0)
+        return to_dict("na", "{} is not a valid IP address".format(ip), 0), 400
     p = subprocess.Popen(["ping", "-c", str(PACKETS), ip])
     p.wait()
     error_code = p.poll()
     if error_code == 0:
         return to_dict(ip, "alive", error_code)
     if error_code == 2:
-        return to_dict(ip, "unreachable", error_code)
+        return to_dict(ip, "unreachable", error_code), 404
     return to_dict(ip, "na", error_code)
 
 
