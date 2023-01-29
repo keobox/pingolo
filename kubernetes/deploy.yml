@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: pingolo-app
-        image: quay.io/cplacani/pingolo:latest
+        image: docker.io/keobox/pingolo:latest
         ports:
         - containerPort: 8080
         env:
